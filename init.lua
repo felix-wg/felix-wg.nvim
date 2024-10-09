@@ -11,6 +11,7 @@ vim.g.loaded_netrwPlugin = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+vim.opt.termguicolors = true
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -207,6 +208,20 @@ require('lazy').setup({
       require('nvim-tree').setup {}
     end,
   },
+  {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('bufferline').setup {}
+
+      vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>', { noremap = true, silent = true, desc = 'Next Buffer' })
+      vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>', { noremap = true, silent = true, desc = 'Previous Buffer' })
+      vim.keymap.set('n', '<leader>bdd', ':bdelete<CR>', { noremap = true, silent = true, desc = 'Delete Buffer' })
+      vim.keymap.set('n', '<leader>bda', ':%bdelete|e#|bd#<CR>', { noremap = true, silent = true, desc = 'Delete All Buffers' })
+      vim.keymap.set('n', '<leader>bds', ':wa|%bdelete|e#|bd#<CR>', { noremap = true, silent = true, desc = 'Delete All Saved Buffers' })
+    end,
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -272,6 +287,8 @@ require('lazy').setup({
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>g', group = '[G]it', mode = { 'n' } },
+        { '<leader>b', group = '[B]uffers', mode = { 'n' } },
+        { '<leader>bd', group = '[D]elete', mode = { 'n' } },
       },
     },
   },
