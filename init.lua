@@ -222,6 +222,32 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>bds', ':wa|%bdelete|e#|bd#<CR>', { noremap = true, silent = true, desc = 'Delete All Saved Buffers' })
     end,
   },
+  {
+    'zbirenbaum/copilot.lua',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup {
+        suggestion = {
+          enable = true,
+          auto_trigger = true,
+          keymap = {
+            accept = '<C-CR>',
+          },
+        },
+        panel = {
+          enable = true,
+          auto_refresh = true,
+        },
+      }
+    end,
+  },
+  {
+    'zbirenbaum/copilot-cmp',
+    after = { 'copilot.lua' },
+    config = function()
+      require('copilot_cmp').setup()
+    end,
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -394,11 +420,10 @@ require('lazy').setup({
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
       vim.keymap.set('n', '<leader>s/', function()
         builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
+          prompt_title = 'Live Grep in Git Repo',
+          cwd = vim.fn.systemlist('git rev-parse --show-toplevel')[1], -- Setze das Arbeitsverzeichnis auf das Root-Verzeichnis des Git-Repos
         }
-      end, { desc = '[S]earch [/] in Open Files' })
-
+      end, { desc = '[S]earch [/] in Git Repo' })
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
