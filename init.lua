@@ -89,7 +89,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
---
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -228,15 +227,10 @@ require('lazy').setup({
     config = function()
       require('copilot').setup {
         suggestion = {
-          enable = true,
-          auto_trigger = true,
-          keymap = {
-            accept = '<C-CR>',
-          },
+          enable = false,
         },
         panel = {
-          enable = true,
-          auto_refresh = true,
+          enable = false,
         },
       }
     end,
@@ -245,7 +239,11 @@ require('lazy').setup({
     'zbirenbaum/copilot-cmp',
     after = { 'copilot.lua' },
     config = function()
-      require('copilot_cmp').setup()
+      require('copilot_cmp').setup {
+        suggestion = {
+          enable = true,
+        },
+      }
     end,
   },
 
@@ -769,7 +767,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<S-CR>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -806,13 +804,17 @@ require('lazy').setup({
         },
         sources = {
           {
+            name = 'copilot',
+            group_index = 2,
+          },
+          {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-            group_index = 0,
+            group_index = 2,
           },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'luasnip', group_index = 2 },
+          { name = 'path', group_index = 2 },
         },
       }
     end,
