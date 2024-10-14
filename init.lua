@@ -85,6 +85,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- list all todos
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -101,6 +102,9 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- keymap to open tree
 vim.keymap.set('n', '<leader>E', '<cmd>NvimTreeToggle<CR>', { desc = 'Open Treeview' })
+
+-- keymap show todo comments
+vim.api.nvim_set_keymap('n', '<leader>wt', ':TodoTelescope<CR>', { noremap = true, silent = true, desc = 'Show all [T]odo comments' })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -244,6 +248,13 @@ require('lazy').setup({
           enable = true,
         },
       }
+    end,
+  },
+  {
+    'folke/todo-comments.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('todo-comments').setup {}
     end,
   },
 
