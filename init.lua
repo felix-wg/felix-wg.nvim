@@ -230,6 +230,7 @@ require('lazy').setup({
     event = 'InsertEnter',
     config = function()
       require('copilot').setup {
+        auto_install = true,
         suggestion = {
           enable = false,
         },
@@ -244,6 +245,7 @@ require('lazy').setup({
     after = { 'copilot.lua' },
     config = function()
       require('copilot_cmp').setup {
+        auto_install = true,
         suggestion = {
           enable = true,
         },
