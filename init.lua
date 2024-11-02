@@ -1,3 +1,34 @@
+-- define colors
+local colors = {
+  background = '#2a211c',
+  foreground = '#b8a898',
+  foreground_comment = '#928374',
+  cursor = '#ffffff',
+  selection_background = '#c3dcff',
+  selection_foreground = '#2a211c',
+  color0 = '#000000',
+  color8 = '#545753',
+  red_dark = '#8a0c15',
+  red = '#cc0000',
+  red_light = '#ef2828',
+  green = '#1a921c',
+  green_light = '#9aff87',
+  yellow = '#efe43a',
+  yellow_light = '#fffa5c',
+  color4 = '#0066ff',
+  color12 = '#43a8ed',
+  color5 = '#c5656b',
+  color13 = '#ff8089',
+  cyan_dark = '#05989a',
+  cyan = '#34e2e2',
+  color7 = '#d3d7cf',
+  color15 = '#ededec',
+  orange = '#f07100',
+  orange_light = '#f5a258',
+  pink = '#e574ed',
+  pink_dark = '#89328f',
+}
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -79,6 +110,8 @@ vim.opt.scrolloff = 15
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+vim.keymap.set('n', '<leader>ui', '<cmd>Inspect<CR>', { desc = '[I]nspect word under cursor' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -109,7 +142,6 @@ vim.api.nvim_set_keymap('n', '<leader>wt', ':TodoTelescope<CR>', { noremap = tru
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
--- highlight the window you are in
 
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
@@ -118,6 +150,9 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 vim.keymap.set('n', '<leader>cM', ':Mason<CR>', { desc = 'Open [M]ason' })
+
+-- toggle colorizer
+vim.keymap.set('n', '<leader>tc', '<cmd>ColorizerToggle<CR>', { desc = 'Toggle [T]oggle [C]olorizer' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -159,6 +194,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'norcalli/nvim-colorizer.lua',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -321,6 +357,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { '<leader>u', group = '[U]tilities' },
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>s', group = '[S]earch' },
@@ -836,21 +873,50 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-storm'
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-storm'
+  --
+  --
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
+  {
+    'doums/espresso.nvim',
+    config = function()
+      vim.cmd 'colorscheme espresso'
+      -- Normaler Hintergrund und Textfarbe
+      vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
 
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      -- Cursor und Auswahl
+      vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
+      vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
+      vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
+      vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
+      vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.color0, fg = colors.color7 })
+      vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.color0 })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.color0 })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.color0 })
+      vim.api.nvim_set_hl(0, '@lsp.type.interface', { fg = colors.color4 })
+      vim.api.nvim_set_hl(0, '@lsp.type.type', { fg = colors.color4 })
+      vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
+      vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
+      vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
+      vim.api.nvim_set_hl(0, 'BufferLineBackground', { bg = colors.background })
+      vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
+      vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
+      vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.pink_dark, bg = colors.background })
     end,
   },
 
@@ -880,7 +946,9 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+      }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
