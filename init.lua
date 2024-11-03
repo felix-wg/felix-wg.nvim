@@ -6,17 +6,17 @@ local colors = {
   cursor = '#ffffff',
   selection_background = '#c3dcff',
   selection_foreground = '#2a211c',
-  color0 = '#000000',
-  color8 = '#545753',
+  black = '#000000',
+  grey1 = '#545753',
   red_dark = '#8a0c15',
   red = '#cc0000',
   red_light = '#ef2828',
   green = '#1a921c',
   green_light = '#9aff87',
   yellow = '#efe43a',
-  yellow_light = '#fffa5c',
-  color4 = '#0066ff',
-  color12 = '#43a8ed',
+  yellow_light = '#e3de52',
+  blue = '#0066ff',
+  blue_light = '#43a8ed',
   color5 = '#c5656b',
   color13 = '#ff8089',
   cyan_dark = '#05989a',
@@ -26,7 +26,7 @@ local colors = {
   orange = '#f07100',
   orange_light = '#f5a258',
   pink = '#e574ed',
-  pink_dark = '#89328f',
+  magenta = '#89328f',
 }
 
 -- Set <space> as the leader key
@@ -904,23 +904,27 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
       vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
       vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
-      vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.color0, fg = colors.color7 })
+      vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
       vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.color0 })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.color0 })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.color0 })
-      vim.api.nvim_set_hl(0, '@lsp.type.interface', { fg = colors.yellow })
-      vim.api.nvim_set_hl(0, '@lsp.type.type', { fg = colors.yellow })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
       vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
       vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
       vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, 'BufferLineBackground', { bg = colors.background })
       vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
       vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.pink_dark, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@type', { fg = colors.yellow, bg = colors.background })
+      vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
+      vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
       vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
       vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
+      vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
+      vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
+      vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
+      vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
+      vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
+      vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
+      vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
     end,
   },
 
