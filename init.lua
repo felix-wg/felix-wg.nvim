@@ -748,7 +748,8 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -908,8 +909,8 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.color0 })
       vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.color0 })
       vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.color0 })
-      vim.api.nvim_set_hl(0, '@lsp.type.interface', { fg = colors.color4 })
-      vim.api.nvim_set_hl(0, '@lsp.type.type', { fg = colors.color4 })
+      vim.api.nvim_set_hl(0, '@lsp.type.interface', { fg = colors.yellow })
+      vim.api.nvim_set_hl(0, '@lsp.type.type', { fg = colors.yellow })
       vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
       vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
       vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
@@ -917,6 +918,9 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
       vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
       vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.pink_dark, bg = colors.background })
+      vim.api.nvim_set_hl(0, '@type', { fg = colors.yellow, bg = colors.background })
+      vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
+      vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
     end,
   },
 
