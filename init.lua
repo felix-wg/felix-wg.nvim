@@ -212,13 +212,59 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
+        add = { text = '┃' },
+        change = { text = '┃' },
         delete = { text = '_' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      signs_staged = {
+        add = { text = '┃' },
+        change = { text = '┃' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      signs_staged_enable = true,
+      signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+      numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+      linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+      word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+      watch_gitdir = {
+        follow_files = true,
+      },
+      auto_attach = true,
+      attach_to_untracked = false,
+      current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+      current_line_blame_opts = {
+        virt_text = true,
+        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+        delay = 1000,
+        ignore_whitespace = false,
+        virt_text_priority = 100,
+        use_focus = true,
+      },
+      current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
+      sign_priority = 6,
+      update_debounce = 100,
+      status_formatter = nil, -- Use default
+      max_file_length = 40000, -- Disable if file is longer than this (in lines)
+      preview_config = {
+        -- Options passed to nvim_open_win
+        border = 'single',
+        style = 'minimal',
+        relative = 'cursor',
+        row = 0,
+        col = 1,
       },
     },
+    config = function()
+      require('gitsigns').setup()
+      vim.keymap.set('n', '<leader>gs', '<cmd>lua require"gitsigns".toggle_signs()<CR>', { desc = 'Toggle [G]it [S]igns' })
+      vim.keymap.set('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line()<CR>', { desc = 'Toggle [G]it [B]lame' })
+    end,
   },
   { -- adding lazygit
     'kdheepak/lazygit.nvim',
@@ -874,59 +920,58 @@ require('lazy').setup({
     end,
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-storm'
-  --
-  --
-  --     -- You can configure highlights by doing something like:
-  --     vim.cmd.hi 'Comment gui=none'
-  --   end,
-  -- },
-  {
-    'doums/espresso.nvim',
-    config = function()
-      vim.cmd 'colorscheme espresso'
-      -- Normaler Hintergrund und Textfarbe
-      vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
+  { -- You can easily change to a different colorscheme.
+    -- Change the name of the colorscheme plugin below, and then
+    -- change the command in the config to whatever the name of that colorscheme is.
+    --
+    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'tokyonight-storm'
 
-      -- Cursor und Auswahl
-      vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
-      vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
-      vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
-      vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
-      vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
-      vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
-      vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
-      vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
-      vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
-      vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
-      vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
-      vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
-      vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
-      vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
-      vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
+      -- You can configure highlights by doing something like:
+      vim.cmd.hi 'Comment gui=none'
     end,
   },
+  -- {
+  --   'doums/espresso.nvim',
+  --   config = function()
+  --     vim.cmd 'colorscheme espresso'
+  --     -- Normaler Hintergrund und Textfarbe
+  --     vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
+  --
+  --     -- Cursor und Auswahl
+  --     vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
+  --     vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
+  --     vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
+  --     vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
+  --     vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
+  --     vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
+  --     vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
+  --     vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
+  --     vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
+  --     vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
+  --     vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
+  --     vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
+  --     vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
