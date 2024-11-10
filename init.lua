@@ -709,8 +709,8 @@ require('lazy').setup({
       }
     end,
   },
-
-  { -- Autoformat
+  {
+    -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -727,9 +727,6 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true, md = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
@@ -744,16 +741,21 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        tsx = { 'prettier' },
       },
     },
+    config = function()
+      -- Autocommand for automatic formatting on save
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*',
+        callback = function()
+          require('conform').format()
+        end,
+      })
+    end,
   },
-
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -874,59 +876,57 @@ require('lazy').setup({
     end,
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-storm'
-  --
-  --
-  --     -- You can configure highlights by doing something like:
-  --     vim.cmd.hi 'Comment gui=none'
-  --   end,
-  -- },
-  {
-    'doums/espresso.nvim',
-    config = function()
-      vim.cmd 'colorscheme espresso'
-      -- Normaler Hintergrund und Textfarbe
-      vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
+  { -- You can easily change to a different colorscheme.
+    -- Change the name of the colorscheme plugin below, and then
+    -- change the command in the config to whatever the name of that colorscheme is.
+    --
+    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'tokyonight-storm'
 
-      -- Cursor und Auswahl
-      vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
-      vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
-      vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
-      vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
-      vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
-      vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
-      vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
-      vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
-      vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
-      vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
-      vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
-      vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
-      vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
-      vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
-      vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
-      vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
-      vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
-      vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
+      -- You can configure highlights by doing something like:
+      vim.cmd.hi 'Comment gui=none'
     end,
   },
+  -- {
+  --   'doums/espresso.nvim',
+  --   config = function()
+  --     vim.cmd 'colorscheme espresso'
+  --     -- Normaler Hintergrund und Textfarbe
+  --     vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
+  --
+  --     -- Cursor und Auswahl
+  --     vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
+  --     vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
+  --     vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
+  --     vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
+  --     vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
+  --     vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
+  --     vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
+  --     vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
+  --     vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
+  --     vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
+  --     vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
+  --     vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
+  --     vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
+  --     vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
+  --     vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
