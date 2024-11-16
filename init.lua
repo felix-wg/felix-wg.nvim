@@ -414,14 +414,15 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>u',  group = '[U]tilities' },
-        { '<leader>c',  group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c',  group = '[C]ode',              mode = { 'n', 'x' } },
         { '<leader>d',  group = '[D]ocument' },
         { '<leader>s',  group = '[S]earch' },
         { '<leader>w',  group = '[W]orkspace' },
         { '<leader>t',  group = '[T]oggle' },
-        { '<leader>g',  group = '[G]it',      mode = { 'n' } },
-        { '<leader>b',  group = '[B]uffers',  mode = { 'n' } },
-        { '<leader>bd', group = '[D]elete',   mode = { 'n' } },
+        { '<leader>g',  group = '[G]it',               mode = { 'n' } },
+        { '<leader>b',  group = '[B]uffers',           mode = { 'n' } },
+        { '<leader>bd', group = '[D]elete',            mode = { 'n' } },
+        { '<leader>?',  group = 'Nvim Settings/Config' },
       },
     },
   },
@@ -931,7 +932,7 @@ require('lazy').setup({
       }
     end,
   },
-  
+
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -944,11 +945,32 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-storm'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+  },
+  {
+    'sainnhe/gruvbox-material',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.g.gruvbox_material_enable_italic = true
+    end
+  },
+  { -- theme switcher; add all themes before this
+    "zaldih/themery.nvim",
+    lazy = false,
+    config = function()
+      require("themery").setup({
+        -- add the config here
+        themes = { "tokyonight-storm", "gruvbox-material" },  -- Your list of installed colorschemes.
+        livePreview = true,               -- Apply theme while picking. Default to true.
+        vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true })
+      })
+    end
   },
   -- {
   --   'doums/espresso.nvim',
