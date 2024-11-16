@@ -137,7 +137,8 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 vim.keymap.set('n', '<leader>E', '<cmd>NvimTreeToggle<CR>', { desc = 'Open Treeview' })
 
 -- keymap show todo comments
-vim.api.nvim_set_keymap('n', '<leader>wt', ':TodoTelescope<CR>', { noremap = true, silent = true, desc = 'Show all [T]odo comments' })
+vim.api.nvim_set_keymap('n', '<leader>wt', ':TodoTelescope<CR>',
+  { noremap = true, silent = true, desc = 'Show all [T]odo comments' })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -195,6 +196,10 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'norcalli/nvim-colorizer.lua',
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -229,8 +234,8 @@ require('lazy').setup({
       },
       signs_staged_enable = true,
       signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-      numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-      linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+      numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+      linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
       word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
       watch_gitdir = {
         follow_files = true,
@@ -249,7 +254,7 @@ require('lazy').setup({
       current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
       sign_priority = 6,
       update_debounce = 100,
-      status_formatter = nil, -- Use default
+      status_formatter = nil,  -- Use default
       max_file_length = 40000, -- Disable if file is longer than this (in lines)
       preview_config = {
         -- Options passed to nvim_open_win
@@ -262,7 +267,8 @@ require('lazy').setup({
     },
     config = function()
       require('gitsigns').setup()
-      vim.keymap.set('n', '<leader>gs', '<cmd>lua require"gitsigns".toggle_signs()<CR>', { desc = 'Toggle [G]it [S]igns' })
+      vim.keymap.set('n', '<leader>gs', '<cmd>lua require"gitsigns".toggle_signs()<CR>',
+        { desc = 'Toggle [G]it [S]igns' })
       vim.keymap.set('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line()<CR>', { desc = 'Toggle [G]it [B]lame' })
     end,
   },
@@ -304,11 +310,15 @@ require('lazy').setup({
     config = function()
       require('bufferline').setup {}
 
-      vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>', { noremap = true, silent = true, desc = 'Next Buffer' })
-      vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>', { noremap = true, silent = true, desc = 'Previous Buffer' })
+      vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>',
+        { noremap = true, silent = true, desc = 'Next Buffer' })
+      vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>',
+        { noremap = true, silent = true, desc = 'Previous Buffer' })
       vim.keymap.set('n', '<leader>bdd', ':bdelete<CR>', { noremap = true, silent = true, desc = 'Delete Buffer' })
-      vim.keymap.set('n', '<leader>bda', ':%bdelete|e#|bd#<CR>', { noremap = true, silent = true, desc = 'Delete All Buffers' })
-      vim.keymap.set('n', '<leader>bds', ':wa|%bdelete|e#|bd#<CR>', { noremap = true, silent = true, desc = 'Delete All Saved Buffers' })
+      vim.keymap.set('n', '<leader>bda', ':%bdelete|e#|bd#<CR>',
+        { noremap = true, silent = true, desc = 'Delete All Buffers' })
+      vim.keymap.set('n', '<leader>bds', ':wa|%bdelete|e#|bd#<CR>',
+        { noremap = true, silent = true, desc = 'Delete All Saved Buffers' })
     end,
   },
   {
@@ -360,7 +370,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -403,15 +413,15 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>u', group = '[U]tilities' },
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>g', group = '[G]it', mode = { 'n' } },
-        { '<leader>b', group = '[B]uffers', mode = { 'n' } },
-        { '<leader>bd', group = '[D]elete', mode = { 'n' } },
+        { '<leader>u',  group = '[U]tilities' },
+        { '<leader>c',  group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>d',  group = '[D]ocument' },
+        { '<leader>s',  group = '[S]earch' },
+        { '<leader>w',  group = '[W]orkspace' },
+        { '<leader>t',  group = '[T]oggle' },
+        { '<leader>g',  group = '[G]it',      mode = { 'n' } },
+        { '<leader>b',  group = '[B]uffers',  mode = { 'n' } },
+        { '<leader>bd', group = '[D]elete',   mode = { 'n' } },
       },
     },
   },
@@ -445,7 +455,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -541,7 +551,7 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta', lazy = true },
+  { 'Bilal2453/luvit-meta',     lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -553,7 +563,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -915,12 +925,13 @@ require('lazy').setup({
             group_index = 2,
           },
           { name = 'nvim_lsp', group_index = 2 },
-          { name = 'luasnip', group_index = 2 },
-          { name = 'path', group_index = 2 },
+          { name = 'luasnip',  group_index = 2 },
+          { name = 'path',     group_index = 2 },
         },
       }
     end,
   },
+  
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
