@@ -248,12 +248,12 @@ require('lazy').setup({
       { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
     },
   },
-{ -- LSP signature hint as you type
-  "ray-x/lsp_signature.nvim",
-  event = "VeryLazy",
-  opts = {},
-  config = function(_, opts) require'lsp_signature'.setup(opts) end
-},
+  { -- LSP signature hint as you type
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function(_, opts) require 'lsp_signature'.setup(opts) end
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -569,6 +569,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>s<leader>', builtin.git_files, { desc = '[S] Find in git Repo' })
       vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>so', builtin.lsp_document_symbols, { desc = '[S]earch [O]utline' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
