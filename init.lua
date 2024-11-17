@@ -455,6 +455,31 @@ require('lazy').setup({
       }
     end
   },
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        -- config
+        theme = 'hyper',
+        config = {
+          week_header = { enable = true },
+          shortcut = {
+            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Files',
+              group = 'Label',
+              action = 'Telescope find_files',
+              key = 'f',
+            },
+          },
+        },
+      }
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } }
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -1142,7 +1167,6 @@ require('lazy').setup({
       require('mini.surround').setup()
 
       -- Animate common neovim actions
-      require('mini.animate').setup()
 
       -- show current scope in indents
       require('mini.indentscope').setup()
