@@ -193,7 +193,7 @@ require('lazy').setup({
   'nvim-tree/nvim-web-devicons',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'norcalli/nvim-colorizer.lua',
-  {                   -- pretty ui for things
+  {                   -- Neovim plugin to improve the default vim.ui interfaces
     'stevearc/dressing.nvim',
     opts = {},
   },
@@ -234,6 +234,26 @@ require('lazy').setup({
       },
     },
   },
+  { -- Navigate your code with search labels, enhanced character motions and Treesitter integration
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
+  },
+{ -- LSP signature hint as you type
+  "ray-x/lsp_signature.nvim",
+  event = "VeryLazy",
+  opts = {},
+  config = function(_, opts) require'lsp_signature'.setup(opts) end
+},
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
