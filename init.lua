@@ -401,12 +401,59 @@ require('lazy').setup({
       }
     end,
   },
-  {
+  { -- format and find todo comments
     'folke/todo-comments.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('todo-comments').setup {}
     end,
+  },
+  { -- statusline
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          icons_enabled = true,
+          theme = 'auto',
+          component_separators = { left = '', right = '' },
+          section_separators = { left = '', right = '' },
+          disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          always_show_tabline = true,
+          globalstatus = false,
+          refresh = {
+            statusline = 100,
+            tabline = 100,
+            winbar = 100,
+          }
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_c = { 'filename' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' }
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {},
+          lualine_z = {}
+        },
+        tabline = {},
+        winbar = {},
+        inactive_winbar = {},
+        extensions = {}
+      }
+    end
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -570,6 +617,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s<leader>', builtin.git_files, { desc = '[S] Find in git Repo' })
       vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>so', builtin.lsp_document_symbols, { desc = '[S]earch [O]utline' })
+      vim.keymap.set('n', '<leader>bl', builtin.buffers, { desc = '[L]ist Buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -1091,22 +1139,7 @@ require('lazy').setup({
       -- show current scope in indents
       require('mini.indentscope').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup {
-        use_icons = vim.g.have_nerd_font,
-      }
 
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
