@@ -1058,11 +1058,6 @@ require('lazy').setup({
     'sainnhe/gruvbox-material',
     lazy = false,
     priority = 1000,
-    config = function()
-      -- Optionally configure and load the colorscheme
-      -- directly inside the plugin declaration.
-      vim.g.gruvbox_material_enable_italic = true
-    end
   },
   { -- theme switcher; add all themes before this
     "zaldih/themery.nvim",
@@ -1070,8 +1065,21 @@ require('lazy').setup({
     config = function()
       require("themery").setup({
         -- add the config here
-        themes = { "tokyonight-storm", "gruvbox-material" }, -- Your list of installed colorschemes.
-        livePreview = true,                                  -- Apply theme while picking. Default to true.
+        themes = {
+          {
+            name = "TokyoNightStorm",
+            colorscheme = "tokyonight-storm",
+          },
+          {
+            name = "Gruvbox Material Dark Hard",
+            colorscheme = "gruvbox-material",
+            before = [[
+              vim.g.gruvbox_material_enable_italic = true
+              vim.g.gruvbox_material_background = 'hard'
+           ]]
+          }
+        },
+        livePreview = true, -- Apply theme while picking. Default to true.
         vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true })
       })
     end
