@@ -193,10 +193,10 @@ require('lazy').setup({
   'nvim-tree/nvim-web-devicons',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'norcalli/nvim-colorizer.lua',
-  {                   -- Neovim plugin to improve the default vim.ui interfaces
-    'stevearc/dressing.nvim',
-    opts = {},
-  },
+  -- {                   -- Neovim plugin to improve the default vim.ui interfaces
+  --   'stevearc/dressing.nvim',
+  --   opts = {},
+  -- },
   {            -- diagnostics plugin
     "folke/trouble.nvim",
     opts = {}, -- for default options, refer to the configuration section for custom setup.
@@ -388,6 +388,9 @@ require('lazy').setup({
     keys = {
       { '<leader>gl', '<cmd>LazyGit<cr>', desc = 'Open LazyGit' },
     },
+    config = function()
+      vim.g.lazygit_floating_window_use_plenary = 1
+    end,
   },
   {
     'nvim-tree/nvim-tree.lua',
