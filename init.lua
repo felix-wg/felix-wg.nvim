@@ -116,10 +116,6 @@ vim.keymap.set('n', '<leader>ui', '<cmd>Inspect<CR>', { desc = '[I]nspect word u
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
--- list all todos
-
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -194,11 +190,49 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  'nvim-tree/nvim-web-devicons',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'norcalli/nvim-colorizer.lua',
-  {
+  {                   -- pretty ui for things
     'stevearc/dressing.nvim',
     opts = {},
+  },
+  {            -- diagnostics plugin
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -423,6 +457,7 @@ require('lazy').setup({
         { '<leader>b',  group = '[B]uffers',           mode = { 'n' } },
         { '<leader>bd', group = '[D]elete',            mode = { 'n' } },
         { '<leader>?',  group = 'Nvim Settings/Config' },
+        { '<leader>x',  group = 'Diagnostics' }
       },
     },
   },
@@ -966,8 +1001,8 @@ require('lazy').setup({
     config = function()
       require("themery").setup({
         -- add the config here
-        themes = { "tokyonight-storm", "gruvbox-material" },  -- Your list of installed colorschemes.
-        livePreview = true,               -- Apply theme while picking. Default to true.
+        themes = { "tokyonight-storm", "gruvbox-material" }, -- Your list of installed colorschemes.
+        livePreview = true,                                  -- Apply theme while picking. Default to true.
         vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true })
       })
     end
