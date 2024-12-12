@@ -1168,7 +1168,11 @@ require('lazy').setup({
         },
         livePreview = true, -- Apply theme while picking. Default to true.
         vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true })
+
       })
+      vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { link = "Error" })
+      vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { link = "WarningMsg" })
+      vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { link = "helpNote" })
     end
   },
   -- {
