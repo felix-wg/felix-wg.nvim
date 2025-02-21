@@ -255,49 +255,49 @@ require('lazy').setup({
     opts = {},
     config = function(_, opts) require 'lsp_signature'.setup(opts) end
   },
-  {
-    "chentoast/marks.nvim",
-    event = "VeryLazy",
-    opts = {},
-    config = function()
-      require 'marks'.setup {
-        -- whether to map keybinds or not. default true
-        default_mappings = true,
-        -- which builtin marks to show. default {}
-        builtin_marks = { ".", "<", ">", "^" },
-        -- whether movements cycle back to the beginning/end of buffer. default true
-        cyclic = true,
-        -- whether the shada file is updated after modifying uppercase marks. default false
-        force_write_shada = false,
-        -- how often (in ms) to redraw signs/recompute mark positions.
-        -- higher values will have better performance but may cause visual lag,
-        -- while lower values may cause performance penalties. default 150.
-        refresh_interval = 250,
-        -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
-        -- marks, and bookmarks.
-        -- can be either a table with all/none of the keys, or a single number, in which case
-        -- the priority applies to all marks.
-        -- default 10.
-        sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
-        -- disables mark tracking for specific filetypes. default {}
-        excluded_filetypes = {},
-        -- disables mark tracking for specific buftypes. default {}
-        excluded_buftypes = {},
-        -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
-        -- sign/virttext. Bookmarks can be used to group together positions and quickly move
-        -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
-        -- default virt_text is "".
-        bookmark_0 = {
-          sign = "⚑",
-          virt_text = "hello world",
-          -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
-          -- defaults to false.
-          annotate = false,
-        },
-        mappings = {}
-      }
-    end
-  },
+  -- {
+  --   "chentoast/marks.nvim",
+  --   event = "VeryLazy",
+  --   opts = {},
+  --   config = function()
+  --     require 'marks'.setup {
+  --       -- whether to map keybinds or not. default true
+  --       default_mappings = true,
+  --       -- which builtin marks to show. default {}
+  --       builtin_marks = { ".", "<", ">", "^" },
+  --       -- whether movements cycle back to the beginning/end of buffer. default true
+  --       cyclic = true,
+  --       -- whether the shada file is updated after modifying uppercase marks. default false
+  --       force_write_shada = false,
+  --       -- how often (in ms) to redraw signs/recompute mark positions.
+  --       -- higher values will have better performance but may cause visual lag,
+  --       -- while lower values may cause performance penalties. default 150.
+  --       refresh_interval = 250,
+  --       -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
+  --       -- marks, and bookmarks.
+  --       -- can be either a table with all/none of the keys, or a single number, in which case
+  --       -- the priority applies to all marks.
+  --       -- default 10.
+  --       sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
+  --       -- disables mark tracking for specific filetypes. default {}
+  --       excluded_filetypes = {},
+  --       -- disables mark tracking for specific buftypes. default {}
+  --       excluded_buftypes = {},
+  --       -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
+  --       -- sign/virttext. Bookmarks can be used to group together positions and quickly move
+  --       -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
+  --       -- default virt_text is "".
+  --       bookmark_0 = {
+  --         sign = "⚑",
+  --         virt_text = "hello world",
+  --         -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+  --         -- defaults to false.
+  --         annotate = false,
+  --       },
+  --       mappings = {}
+  --     }
+  --   end
+  -- },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -743,7 +743,10 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta',     lazy = true },
+  -- { -- LSP completion plugin
+  --   'Bilal2453/luvit-meta',
+  --   lazy = true
+  -- },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -969,7 +972,17 @@ require('lazy').setup({
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
+    opts = {
+    },
+    -- config = function()
+    --   require("typescript-tools").setup {
+    --     settings = {
+    --        tsserver_file_preferences = {
+    --         tabstop = 2,
+    --       }
+    --     }
+    --   }
+    -- end,
   },
   {
     -- Autoformat
@@ -1189,45 +1202,14 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { link = "helpNote" })
     end
   },
-  -- {
-  --   'doums/espresso.nvim',
-  --   config = function()
-  --     vim.cmd 'colorscheme espresso'
-  --     -- Normaler Hintergrund und Textfarbe
-  --     vim.api.nvim_set_hl(0, 'Normal', { bg = colors.background, fg = colors.foreground })
-  --
-  --     -- Cursor und Auswahl
-  --     vim.api.nvim_set_hl(0, 'Cursor', { fg = colors.cursor, bg = colors.cursor })
-  --     vim.api.nvim_set_hl(0, 'Visual', { bg = colors.selection_background, fg = colors.selection_foreground })
-  --     vim.api.nvim_set_hl(0, 'FloatBorder', { fg = colors.yellow_light })
-  --     vim.api.nvim_set_hl(0, 'FloatTitle', { fg = colors.yellow_light })
-  --     vim.api.nvim_set_hl(0, 'StatusLine', { bg = colors.black, fg = colors.color7 })
-  --     vim.api.nvim_set_hl(0, 'Comment', { fg = colors.foreground_comment })
-  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.green, fg = colors.black })
-  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.cyan_dark, fg = colors.black })
-  --     vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.cyan, fg = colors.black })
-  --     vim.api.nvim_set_hl(0, '@lsp.type.function', { fg = colors.color5 })
-  --     vim.api.nvim_set_hl(0, '@lsp.type.method', { fg = colors.color5 })
-  --     vim.api.nvim_set_hl(0, '@function', { fg = colors.color5 })
-  --     vim.api.nvim_set_hl(0, 'BufferLineFill', { bg = colors.background })
-  --     vim.api.nvim_set_hl(0, 'Warning', { fg = colors.orange_light, bg = colors.background })
-  --     vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = colors.magenta, bg = colors.background })
-  --     vim.api.nvim_set_hl(0, '@type', { fg = colors.blue_light, bg = colors.background })
-  --     vim.api.nvim_set_hl(0, '@variable', { fg = colors.green_light, bg = colors.background })
-  --     vim.api.nvim_set_hl(0, '@field', { fg = colors.color7, bg = colors.background })
-  --     vim.api.nvim_set_hl(0, 'Keyword', { fg = colors.orange_light })
-  --     vim.api.nvim_set_hl(0, 'Number', { fg = colors.orange })
-  --     vim.api.nvim_set_hl(0, 'String', { fg = colors.green_light })
-  --     vim.api.nvim_set_hl(0, '@operator', { fg = colors.yellow })
-  --     vim.api.nvim_set_hl(0, 'Constant', { fg = colors.magenta })
-  --     vim.api.nvim_set_hl(0, '@tag.delimiter', { fg = colors.cyan_dark })
-  --     vim.api.nvim_set_hl(0, '@punctuation', { fg = colors.cyan_dark })
-  --   end,
-  -- },
-
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
+  {
+    'folke/todo-comments.nvim',
+    lazy = true,
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false }
+  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
