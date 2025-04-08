@@ -849,7 +849,14 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+            -- WORKAROUND: Disable buggy semantic tokens for OmniSharp
+            if client.name == "omnisharp" then
+              client.server_capabilities.semanticTokensProvider = nil
+            end
+
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -922,7 +929,6 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -974,15 +980,15 @@ require('lazy').setup({
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     opts = {
     },
-    -- config = function()
-    --   require("typescript-tools").setup {
-    --     settings = {
-    --        tsserver_file_preferences = {
-    --         tabstop = 2,
-    --       }
-    --     }
-    --   }
-    -- end,
+    config = function()
+      require("typescript-tools").setup {
+        settings = {
+           tsserver_file_preferences = {
+            tabstop = 2,
+          }
+        }
+      }
+    end,
   },
   {
     -- Autoformat
