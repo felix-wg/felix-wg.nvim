@@ -1025,6 +1025,7 @@ require('lazy').setup({
         javascript = { 'prettier' },
         typescript = { 'prettier' },
         tsx = { 'prettier' },
+        csharp = { 'csharpier' },
       },
     },
     config = function()
