@@ -49,6 +49,9 @@ vim.opt.termguicolors = true
 --  For more options, you can see `:help option-list`
 
 vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.softtabstop = 2
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -192,7 +195,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'nvim-tree/nvim-web-devicons',
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'norcalli/nvim-colorizer.lua',
   -- {                   -- Neovim plugin to improve the default vim.ui interfaces
   --   'stevearc/dressing.nvim',
