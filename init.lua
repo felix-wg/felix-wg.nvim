@@ -370,6 +370,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>gs', '<cmd>lua require"gitsigns".toggle_signs()<CR>',
         { desc = 'Toggle [G]it [S]igns' })
       vim.keymap.set('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line()<CR>', { desc = 'Toggle [G]it [B]lame' })
+      vim.keymap.set('n', '<leader>gh', ':Telescrope git_file_history<CR>', { desc = 'Show git file [H]istory' })
+      --TODO: show git history for current line
     end,
   },
   { -- adding lazygit
@@ -646,6 +648,14 @@ require('lazy').setup({
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
+      { -- Git file history picker for Telescope
+        "isak102/telescope-git-file-history.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "tpope/vim-fugitive"
+        }
+      },
+
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
@@ -687,6 +697,7 @@ require('lazy').setup({
           },
         },
       }
+      require("telescope").load_extension("git_file_history")
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
@@ -985,7 +996,7 @@ require('lazy').setup({
     config = function()
       require("typescript-tools").setup {
         settings = {
-           tsserver_file_preferences = {
+          tsserver_file_preferences = {
             tabstop = 2,
           }
         }
@@ -1203,7 +1214,7 @@ require('lazy').setup({
           }
         },
         livePreview = true, -- Apply theme while picking. Default to true.
-        vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true, desc = 'Choose Theme' })
 
       })
       vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { link = "Error" })
