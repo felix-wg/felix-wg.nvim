@@ -926,7 +926,8 @@ require('lazy').setup({
         pyright = {
           settings = {
             python = {
-              pythonPath = vim.fn.exepath('python3'),
+              -- use env python3
+              pythonPath = vim.fn.exepath 'python3',
               indent = {
                 size = 2,
               },
@@ -1039,6 +1040,8 @@ require('lazy').setup({
         typescript = { 'prettier' },
         tsx = { 'prettier' },
         csharp = { 'csharpier' },
+        html = { 'prettier' },
+        css = { 'prettier' },
       },
     },
     config = function()
