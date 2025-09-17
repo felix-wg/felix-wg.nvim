@@ -153,7 +153,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>cM', ':Mason<CR>', { desc = 'Open [M]ason' })
 
 -- toggle colorizer
-vim.keymap.set('n', '<leader>tc', '<cmd>ColorizerToggle<CR>', { desc = 'Toggle [T]oggle [C]olorizer' })
+vim.keymap.set('n', '<leader>bC', '<cmd>ColorizerToggle<CR>', { desc = 'Toggle [T]oggle [C]olorizer' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -168,6 +168,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -317,17 +318,17 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '┃' },
+        add = { text = '+' },
         change = { text = '┃' },
-        delete = { text = '_' },
+        delete = { text = '-' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
         untracked = { text = '┆' },
       },
       signs_staged = {
-        add = { text = '┃' },
+        add = { text = '+' },
         change = { text = '┃' },
-        delete = { text = '_' },
+        delete = { text = '-' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
         untracked = { text = '┆' },
@@ -920,20 +921,11 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {
-          settings = {
-            python = {
-              -- use env python3
-              pythonPath = vim.fn.exepath 'python3',
-              indent = {
-                size = 2,
-              },
-            },
-          },
-        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -956,6 +948,19 @@ require('lazy').setup({
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = 'off', -- 'basic' | 'strict' | 'off'
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+              venvPath = vim.fn.stdpath 'data' .. '/mason/packages/pyright/venv',
+            }
+          }
+
         },
       }
 
@@ -1217,7 +1222,8 @@ require('lazy').setup({
           }
         },
         livePreview = true, -- Apply theme while picking. Default to true.
-        vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>", { noremap = true, silent = true, desc = 'Choose Theme' })
+        vim.api.nvim_set_keymap("n", "<leader>?t", "<cmd>:Themery<CR>",
+          { noremap = true, silent = true, desc = 'Choose Theme' })
 
       })
       vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { link = "Error" })
