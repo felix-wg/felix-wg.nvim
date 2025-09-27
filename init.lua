@@ -136,9 +136,13 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 -- keymap to open tree
 vim.keymap.set('n', '<leader>E', '<cmd>NvimTreeToggle<CR>', { desc = 'Open Treeview' })
 
--- keymap show todo comments
-vim.api.nvim_set_keymap('n', '<leader>wt', ':TodoTelescope<CR>',
-  { noremap = true, silent = true, desc = 'Show all [T]odo comments' })
+-- keymap show todo comments in workspace
+vim.api.nvim_set_keymap('n', '<leader>st', ':TodoTelescope<CR>',
+  { noremap = true, silent = true, desc = '[S]earch [T]odo comments' })
+
+-- keymap show todo comments in current document with fuzzy finder
+-- TODO:
+
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -514,20 +518,6 @@ require('lazy').setup({
       require('dashboard').setup {
         -- config
         theme = 'hyper',
-        config = {
-          week_header = { enable = true },
-          shortcut = {
-            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Files',
-              group = 'Label',
-              action = 'Telescope find_files',
-              key = 'f',
-            },
-          },
-        },
       }
     end,
     dependencies = { { 'nvim-tree/nvim-web-devicons' } }
