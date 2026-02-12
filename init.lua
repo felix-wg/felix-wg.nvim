@@ -142,6 +142,32 @@ vim.api.nvim_set_keymap('n', '<leader>st', ':TodoTelescope<CR>',
 
 -- keymap show todo comments in current document with fuzzy finder
 -- TODO:
+--
+--
+-- console log var under cursor (only for javascript/typescript)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "typescript", "typescriptreact" },
+  callback = function()
+    vim.keymap.set("n", "<leader>cL", function()
+      local word = vim.fn.expand("<cword>")
+      vim.cmd(
+        'normal! oconsole.log("' .. word .. ':", ' .. word .. ');'
+      )
+    end, { buffer = true, desc = "console.[L]og variable with name" })
+  end,
+})
+-- console log var under cursor (only for c#)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "csharp" },
+  callback = function()
+    vim.keymap.set("n", "<leader>cL", function()
+      local word = vim.fn.expand("<cword>")
+      vim.cmd(
+        'normal! oConsole.WriteLine("' .. word .. ':", ' .. word .. ');'
+      )
+    end, { buffer = true, desc = "console.[L]og variable with name" })
+  end,
+})
 
 
 -- Keybinds to make split navigation easier.
@@ -952,6 +978,13 @@ require('lazy').setup({
           }
 
         },
+        eslint = {
+          -- If you want to disable formatting capabilities for a particular server, you can do so here.
+          settings = {
+            enable = true,
+            packageManager = 'npm',
+          },
+        }
       }
 
       -- Ensure the servers and tools above are installed
