@@ -457,33 +457,33 @@ require('lazy').setup({
         { noremap = true, silent = true, desc = 'Delete All Saved Buffers' })
     end,
   },
-  {
-    'zbirenbaum/copilot.lua',
-    event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        suggestion = {
-          enable = false,
-        },
-        panel = {
-          enable = false,
-        },
-      }
-    end,
-  },
-  {
-    'zbirenbaum/copilot-cmp',
-    after = { 'copilot.lua' },
-    config = function()
-      require('copilot_cmp').setup {
-        auto_install = true,
-        suggestion = {
-          enable = true,
-        },
-      }
-    end,
-  },
-  { -- format and find todo comments
+  -- {
+  --   'zbirenbaum/copilot.lua',
+  --   event = 'InsertEnter',
+  --   config = function()
+  --     require('copilot').setup {
+  --       suggestion = {
+  --         enable = false,
+  --       },
+  --       panel = {
+  --         enable = false,
+  --       },
+  --     }
+  --   end,
+  -- },
+  -- {
+  --   'zbirenbaum/copilot-cmp',
+  --   after = { 'copilot.lua' },
+  --   config = function()
+  --     require('copilot_cmp').setup {
+  --       auto_install = true,
+  --       suggestion = {
+  --         enable = true,
+  --       },
+  --     }
+  --   end,
+  -- },
+  { -- format and find todo comments https://github.com/folke/todo-comments.nvim
     'folke/todo-comments.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
@@ -1019,6 +1019,7 @@ require('lazy').setup({
   },
   {
     "pmizio/typescript-tools.nvim",
+    lazy = false,
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     opts = {
     },
@@ -1027,6 +1028,10 @@ require('lazy').setup({
         settings = {
           tsserver_file_preferences = {
             tabstop = 2,
+            importModuleSpecifierPreference = "non-relative", -- @/ statt ./
+            includeCompletionsForModuleExports = true,
+            includeCompletionsForImportStatements = true,
+            includeAutomaticOptionalChainCompletions = true,
           }
         }
       }
@@ -1315,6 +1320,31 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+  'nvim-treesitter/nvim-treesitter-context',
+  { -- Twilight is a Lua plugin for Neovim 0.5 that dims inactive portions of the code you're editing.
+    -- https://github.com/folke/twilight.nvim
+    "folke/twilight.nvim",
+    opts = {
+      {
+        dimming = {
+          alpha = 0.25, -- amount of dimming
+          -- we try to get the foreground from the highlight groups or fallback color
+          color = { "Normal", "#ffffff" },
+          term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
+          inactive = false,    -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+        },
+        context = 20,          -- amount of lines we will try to show around the current line
+        treesitter = true,     -- use treesitter when available for the filetype
+        -- treesitter is used to automatically expand the visible text,
+        -- but you can further control the types of nodes that should always be fully expanded
+        expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
+          "function",
+          "method",
+        },
+        exclude = {}, -- exclude these filetypes
+      }
+    }
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
