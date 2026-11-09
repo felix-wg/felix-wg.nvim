@@ -136,6 +136,9 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 -- keymap to open tree
 vim.keymap.set('n', '<leader>E', '<cmd>NvimTreeToggle<CR>', { desc = 'Open Treeview' })
 
+vim.keymap.set('n', 'dmA', '<cmd>delm! | delm A-Z0-9<CR>', { desc = "delete [A]ll marks" })
+vim.api.nvim_set_keymap('n', '<leader>sm', '<cmd>Telescope marks<CR>', { desc = "search marks" })
+
 -- keymap show todo comments in workspace
 vim.api.nvim_set_keymap('n', '<leader>st', ':TodoTelescope<CR>',
   { noremap = true, silent = true, desc = '[S]earch [T]odo comments' })
@@ -190,12 +193,12 @@ vim.keymap.set('n', '<leader>bC', '<cmd>ColorizerToggle<CR>', { desc = 'Toggle [
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
+--  See `:help vim.hl.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -267,6 +270,26 @@ require('lazy').setup({
         desc = "Quickfix List (Trouble)",
       },
     },
+  },
+  { -- hightlight word under cursor
+    'RRethy/vim-illuminate',
+    config = function()
+      require('illuminate').configure({
+        providers = { 'lsp', 'treesitter', 'regex' },
+        delay = 100,
+      })
+      vim.keymap.set('n', '<leader>n', function()
+        require('illuminate').goto_next_reference()
+      end, { desc = 'Nächstes Vorkommen im Scope' })
+      vim.keymap.set('n', '<leader>N', function()
+        require('illuminate').goto_prev_reference()
+      end, { desc = 'Vorheriges Vorkommen im Scope' })
+    end,
+  },
+  {
+    "chentoast/marks.nvim",
+    event = "VeryLazy",
+    opts = {},
   },
   { -- Navigate your code with search labels, enhanced character motions and Treesitter integration
     "folke/flash.nvim",
@@ -483,6 +506,17 @@ require('lazy').setup({
   --     }
   --   end,
   -- },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      image = {
+        -- your image configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    }
+  },
   { -- format and find todo comments https://github.com/folke/todo-comments.nvim
     'folke/todo-comments.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -731,7 +765,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader>s<leader>', builtin.git_files, { desc = '[S] Find in git Repo' })
+      vim.keymap.set('n', '<leader>s<leader>', builtin.find_files, { desc = '[S] Find in git Repo' })
       vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>so', builtin.lsp_document_symbols, { desc = '[S]earch [O]utline' })
       vim.keymap.set('n', '<leader>bl', builtin.buffers, { desc = '[L]ist Buffers' })
@@ -882,10 +916,6 @@ require('lazy').setup({
 
 
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-            -- WORKAROUND: Disable buggy semantic tokens for OmniSharp
-            if client.name == "omnisharp" then
-              client.server_capabilities.semanticTokensProvider = nil
-            end
 
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -978,13 +1008,6 @@ require('lazy').setup({
           }
 
         },
-        eslint = {
-          -- If you want to disable formatting capabilities for a particular server, you can do so here.
-          settings = {
-            enable = true,
-            packageManager = 'npm',
-          },
-        }
       }
 
       -- Ensure the servers and tools above are installed
@@ -1001,7 +1024,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      --require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
         handlers = {
@@ -1298,22 +1321,47 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    -- The main branch does not support lazy-loading
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+    config = function()
+      local ts = require 'nvim-treesitter'
+      ts.install { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+
+      -- The main branch no longer enables highlighting/indent or auto-installs parsers on its own
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
+        callback = function(args)
+          local buf, filetype = args.buf, args.match
+          local lang = vim.treesitter.language.get_lang(filetype)
+          if not lang then
+            return
+          end
+
+          local function start()
+            if not pcall(vim.treesitter.start, buf, lang) then
+              return
+            end
+            -- Ruby depends on vim's regex highlighting and indent rules
+            if filetype == 'ruby' then
+              vim.bo[buf].syntax = 'on'
+              return
+            end
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+
+          if vim.treesitter.language.add(lang) then
+            start()
+          elseif vim.tbl_contains(ts.get_available(), lang) then
+            ts.install(lang):await(function()
+              vim.schedule(start)
+            end)
+          end
+        end,
+      })
+    end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
